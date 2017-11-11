@@ -1,0 +1,28 @@
+Description: This prevents autopkgtests that create gpg keypairs from failing
+             with "gpg: agent_genkey failed: No such file or directory".
+Bug-Ubuntu: https://bugs.launchpad.net/bugs/1627102
+Author: Corey Bryant <corey.bryant@ubuntu.com>
+Forwarded: no
+
+--- a/pbr/tests/test_packaging.py
++++ b/pbr/tests/test_packaging.py
+@@ -42,6 +42,7 @@
+ import email.errors
+ import imp
+ import os
++import psutil
+ import re
+ import sysconfig
+ import tempfile
+@@ -108,6 +109,11 @@
+         super(GPGKeyFixture, self).setUp()
+         tempdir = self.useFixture(fixtures.TempDir())
+         gnupg_version_re = re.compile('^gpg\s.*\s([\d+])\.([\d+])\.([\d+])')
++
++        for proc in psutil.process_iter():
++            if proc.name() == 'gpg-agent':
++                proc.kill()
++
+         gnupg_version = base._run_cmd(['gpg', '--version'], tempdir.path)
+         for line in gnupg_version[0].split('\n'):
+             gnupg_version = gnupg_version_re.match(line)
