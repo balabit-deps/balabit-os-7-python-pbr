@@ -1,3 +1,10 @@
+python-pbr (3.1.1-3ubuntu3.bb1) bionic; urgency=medium
+
+  * don't apply stop-gpg-agent.patch, as it breaks tests with 
+    2.x series GPG
+
+ -- Tamas Pal <folti@balabit.com>  Thu, 02 Aug 2018 12:41:36 +0200
+
 python-pbr (3.1.1-3ubuntu3) bionic; urgency=medium
 
   * Add python-psutil and python3-psutil to Build-Depends-Indep.
